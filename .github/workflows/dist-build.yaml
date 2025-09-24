@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'       # trigger on version tags like v1.0.0
-  workflow_dispatch:    # allow manual trigger
+  workflow_dispatch:    # manual trigger
 
 permissions:
   contents: write       # required for pushing branch and tags
@@ -38,34 +38,28 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 7. Create a worktree for dist-build branch
+      # 7. Create a clean orphan branch for dist-build
       - run: |
-          git fetch origin dist-build || echo "Branch does not exist"
-          if git show-ref --quiet refs/heads/dist-build; then
-            git worktree add build dist-build
-          else
-            git worktree add -b dist-build build
-          fi
+          git checkout --orphan dist-build
+          git rm -rf . || echo "Nothing to remove"
 
-      # 8. Copy dist/ files into worktree
-      - run: cp -r dist/* build/
+      # 8. Copy dist files into branch
+      - run: cp -r dist/* .
 
-      # 9. Commit and push changes
+      # 9. Commit and push the dist-build branch
       - run: |
-          cd build
           git add .
           git commit -m "Build dist for $GITHUB_REF_NAME" || echo "No changes to commit"
           git push origin dist-build --force
 
-      # 10. Update the release tag (version tag)
+      # 10. Update the release tag (version tag) if it's a version
       - run: |
           if [[ "$GITHUB_REF_NAME" == v* ]]; then
             git tag -f "$GITHUB_REF_NAME"
             git push origin "$GITHUB_REF_NAME" --force
           fi
-      
+
       # 11. Update 'latest' tag
       - run: |
           git tag -f latest
           git push origin latest --force
-
