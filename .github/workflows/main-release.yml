@@ -32,6 +32,10 @@ jobs:
       # 4️⃣ Build the library
       - name: Build library
         run: npm run build
+      
+      # 4️⃣ debug
+      - name: debug library
+        run: ls -la dist
 
       # 5️⃣ Create GitHub release and upload dist
       - name: Create Release
