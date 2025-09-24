@@ -39,4 +39,12 @@ jobs:
         with:
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: dist/*
+          files: |
+            dist/tablekit.umd.js
+            dist/tablekit.umd.min.js
+            dist/tablekit.esm.js
+            dist/tablekit.esm.min.js
+            dist/tablekit.umd.css
+            dist/tablekit.umd.min.css
+            dist/tablekit.esm.css
+            dist/tablekit.esm.min.css
