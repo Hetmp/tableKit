@@ -59,10 +59,13 @@ jobs:
 
       # 10. Update the release tag (version tag)
       - run: |
-          git tag -f $GITHUB_REF_NAME
-          git push origin $GITHUB_REF_NAME --force
-
+          if [[ "$GITHUB_REF_NAME" == v* ]]; then
+            git tag -f "$GITHUB_REF_NAME"
+            git push origin "$GITHUB_REF_NAME" --force
+          fi
+      
       # 11. Update 'latest' tag
       - run: |
           git tag -f latest
           git push origin latest --force
+
