@@ -39,7 +39,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       # 7. Create a worktree for dist-build branch
-      - run: git worktree add build dist-build || git worktree add -B dist-build build origin/dist-build
+      - run: |
+          git fetch origin dist-build || echo "Branch does not exist"
+          if git show-ref --quiet refs/heads/dist-build; then
+            git worktree add build dist-build
+          else
+            git worktree add -b dist-build build
+          fi
 
       # 8. Copy dist/ files into worktree
       - run: cp -r dist/* build/
