@@ -1,7 +1,6 @@
 import { TableKit } from "./tablekit";
 import { TableKitConfig } from "./core/config";
 import "./styles/tablekit.css";
-// export const version = "__VERSION__";
 
 export default TableKit;
 
