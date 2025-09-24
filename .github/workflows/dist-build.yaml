@@ -1,0 +1,65 @@
+name: Build and Publish TableKit for jsDelivr
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'       # trigger on version tags like v1.0.0
+  workflow_dispatch:    # manual trigger
+
+permissions:
+  contents: write       # required for pushing branch and tags
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout repo
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all history for tags
+
+      # 2. Setup Node.js
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - run: npm ci
+
+      # 4. Build the library
+      - run: npm run build
+
+      # 5. Verify build output
+      - run: ls -la dist
+
+      # 6. Configure git
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 7. Create a clean orphan branch for dist-build
+      - run: |
+          git checkout --orphan dist-build
+          git rm -rf . || echo "Nothing to remove"
+
+      # 8. Copy dist files into branch
+      - run: cp -r dist/* .
+
+      # 9. Commit and push the dist-build branch
+      - run: |
+          git add .
+          git commit -m "Build dist for $GITHUB_REF_NAME" || echo "No changes to commit"
+          git push origin dist-build --force
+
+      # 10. Update the release tag (version tag) if it's a version
+      - run: |
+          if [[ "$GITHUB_REF_NAME" == v* ]]; then
+            git tag -f "$GITHUB_REF_NAME"
+            git push origin "$GITHUB_REF_NAME" --force
+          fi
+
+      # 11. Update 'latest' tag
+      - run: |
+          git tag -f latest
+          git push origin latest --force
