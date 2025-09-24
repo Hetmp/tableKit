@@ -1,0 +1,78 @@
+.tablekit-loading {
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+}
+
+.tablekit-loading span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 1px;
+  background: #333;
+  border-radius: 50%;
+  animation: tablekit-bounce 1.4s infinite ease-in-out both;
+}
+
+.tablekit-loading span:nth-child(1) { animation-delay: -0.32s; }
+.tablekit-loading span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes tablekit-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.tablekit-error {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: #e74c3c;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.tablekit-popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.tablekit-popup-content {
+  background: #fff;
+  padding: 16px;
+  border-radius: 6px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.tablekit-error-block {
+  margin-bottom: 12px;
+}
+
+.tablekit-error-block strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+td.tablekit-saved{
+  position: relative;
+}
+
+td.tablekit-saved::after {
+  content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><polygon points='12,0 12,12 0,0' fill='%2328a745'/></svg>");
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+}
