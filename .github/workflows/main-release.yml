@@ -40,4 +40,6 @@ jobs:
           allowUpdates: true
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          artifacts: dist
+          artifacts: |
+            dist/tablekit.umd.js
+            dist/tablekit.umd.min.js
