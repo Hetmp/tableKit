@@ -44,8 +44,8 @@ jobs:
 
       # 8. Copy dist files into branch
       - run: |
-          rm -rf *         # optional: clean branch before copying
-          cp -r ../dist/* .
+          rm -rf *           # clean branch
+          cp -r dist/* .     # copy from current repo root
       
       # 9. Commit the built files
       - run: |
